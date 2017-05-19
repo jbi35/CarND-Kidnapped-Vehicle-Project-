@@ -92,30 +92,30 @@ void ParticleFilter::prediction(double delta_t, double std_pos[],
 
 	} // eof loop particels
 }
-void ParticleFilter::dataAssociation(std::vector<LandmarkObs> map_landmarks,
-                                     std::vector<LandmarkObs>& observations_landmarks)
+void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted,
+                                     std::vector<LandmarkObs>& observations)
 {
   /**
    * dataAssociation Solves the data association problem using a simple
    * nearest neighbor search
    *
-   * @param map_landmarks vector containing map landmarks
-   * @param observations_landmarks vector containing observed landmarks
+   * @param predicted vector containing map landmarks
+   * @param observations vector containing observed landmarks
    */
 
 	double current_distance;
 	// loop over all observations
-	for (int i=0;i<observations_landmarks.size();i++)
+	for (int i=0;i<observations.size();i++)
 	{
 		double min_distance = 1000000;
 		int min_distance_id = -1;
     // loop over all predictions
-		for (int j=0;j<map_landmarks.size();j++)
+		for (int j=0;j<predicted.size();j++)
 		{
       // compute distance using helper function
-			current_distance = dist(observations_landmarks[i].x,
-                              observations_landmarks[i].y,
-                              map_landmarks[j].x, map_landmarks[j].y);
+			current_distance = dist(observations[i].x,
+                              observations[i].y,
+                              predicted[j].x, predicted[j].y);
 
 			if (current_distance<min_distance)
 			{
@@ -124,7 +124,7 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> map_landmarks,
         min_distance_id = j;
 			}
 		}
-		observations_landmarks[i].id  = min_distance_id;
+		observations[i].id  = min_distance_id;
 	}
 }
 
